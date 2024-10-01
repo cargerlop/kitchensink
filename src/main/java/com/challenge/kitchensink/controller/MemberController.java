@@ -15,26 +15,26 @@ import com.challenge.kitchensink.model.Member;
 import com.challenge.kitchensink.service.IMemberService;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
 	@Autowired
 	private IMemberService memberService;
 	
-	@PostMapping("/register")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void registerMember(@RequestBody Member member) {
-		memberService.save(member);
+	@GetMapping("/listAllMembers")
+	public ResponseEntity<?> listAllMembers(){
+		return ResponseEntity.ok(memberService.findAllOrderedByName());
 	}
-	
-	@GetMapping("/all")
-	public ResponseEntity<?> findAllMember(){
-		return ResponseEntity.ok(memberService.findAll());
-	}
-	
-	@GetMapping("/get/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id){
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> lookupMemberById(@PathVariable Long id){
 		return ResponseEntity.ok(memberService.findById(id));
 	}
-	
+
+	@PostMapping("/createMember")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createMember(@RequestBody Member member) {
+		memberService.save(member);
+	}
+
 }
